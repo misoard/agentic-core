@@ -103,4 +103,4 @@ Agents SDKs. Protocols to know by name: **MCP** (agent↔tools), **A2A** (agent�
 
 ## License
 
-TODO — choose before publishing (MIT / Apache-2.0 / proprietary).
+[MIT](LICENSE) © 2026 Mathieu Isoard.

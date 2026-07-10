@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "Project-agnostic agentic LLM core skeleton — one call path, typed contracts, narrow agents."
 readme = "README.md"
 requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "Mathieu Isoard", email = "isoard.mathieu@gmail.com" }]
 keywords = ["llm", "agents", "litellm", "pydantic", "gateway", "orchestration"]
 classifiers = [
