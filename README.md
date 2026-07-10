@@ -50,17 +50,20 @@ multiply:
 
 ## Add it to your project
 
-`agentic-core` is a dependency you add to *your* repo — you don't clone it. Until
-it's on PyPI, install from Git:
+`agentic-core` is a dependency you add to *your* repo — you don't clone it. From
+scratch (until it's on PyPI, install from Git):
 
 ```bash
+mkdir my-agent-app && cd my-agent-app
+uv init                                  # creates pyproject.toml + .venv
 uv add "agentic-core @ git+https://github.com/<your-username>/agentic-core.git"
-# pin a release:  uv add "agentic-core @ git+https://github.com/<your-username>/agentic-core.git@v0.1.0"
-# or with pip:    pip install "agentic-core @ git+https://github.com/<your-username>/agentic-core.git"
+#   pin a release:  uv add "agentic-core @ git+https://github.com/<your-username>/agentic-core.git@v0.1.0"
+echo "OPENROUTER_API_KEY=sk-or-..." > .env
 ```
 
-Then `import agentic_core` (see below). Provide your provider key (e.g.
-`OPENROUTER_API_KEY`) in your environment for live calls.
+`uv add` edits your `pyproject.toml`, writes `uv.lock`, and installs into `.venv`
+— you never hand-edit them. Then `import agentic_core` (see below) and run with
+`uv run python -m app.workflow`. Prefer pip? `pip install "agentic-core @ git+https://github.com/<your-username>/agentic-core.git"`.
 
 ## Use it in your project
 
@@ -91,16 +94,26 @@ result = await agent.run({"text": "..."})   # result.parsed is a validated Out
 - **Testing offline**: `from agentic_core.testing import FakeRouter, make_response`
   and inject the fake Router — the same seam the core's own tests use.
 
+**Start from a working example.** [`how_to_start/`](how_to_start/) is a runnable
+toy showing the recommended file split you'd copy into your own project:
+`config.py` (your models + `build_gateway`) · `agents.py` (typed agents) ·
+`prompts/` (versioned prompts) · `workflow.py` (the entry point). It lives in this
+repo but is **not** shipped in the package. Run it from the repo root:
+`uv run python -m how_to_start.workflow` (needs `OPENROUTER_API_KEY`).
+
 ## What's here
 
 ```
-src/agentic_core/
+src/agentic_core/                the PACKAGE (shipped in the wheel)
   core/         errors · schemas · config · gateway · observability
   agents/       base.py          (the Agent abstraction)
   orchestration/runner.py        (composition primitives)
   guardrails/   io_guards.py      (injection · tool-arg · PII · policy)
   eval/         harness.py        (dataset → run → score → compare)
   testing.py    FakeRouter + make_response (shipped test seam)
+
+how_to_start/                    toy example (in the repo, NOT in the wheel):
+  config.py · agents.py · prompts/ · workflow.py
 ```
 
 Frameworks deliberately **not** adopted (but swappable in at a clean seam):
