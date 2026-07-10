@@ -3,6 +3,7 @@
 #  which ships only src/agentic_core. No ignore rule needed for it.)
 # personal notes / scratch specs
 claude files/
+SPEC-agentic-core.md
 # local Claude Code settings & memory
 .claude/
 
