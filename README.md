@@ -48,12 +48,19 @@ multiply:
   **gateway**'s job, only. It re-prompts with the bad answer + validation error.
   This is the single retry-like loop in the gateway (driven by tenacity).
 
-## Install
+## Add it to your project
+
+`agentic-core` is a dependency you add to *your* repo — you don't clone it. Until
+it's on PyPI, install from Git:
 
 ```bash
-uv sync --extra dev      # dev + runtime deps into .venv
-uv run pytest -q         # fully offline, no API key needed
+uv add "agentic-core @ git+https://github.com/<your-username>/agentic-core.git"
+# pin a release:  uv add "agentic-core @ git+https://github.com/<your-username>/agentic-core.git@v0.1.0"
+# or with pip:    pip install "agentic-core @ git+https://github.com/<your-username>/agentic-core.git"
 ```
+
+Then `import agentic_core` (see below). Provide your provider key (e.g.
+`OPENROUTER_API_KEY`) in your environment for live calls.
 
 ## Use it in your project
 
@@ -99,6 +106,15 @@ src/agentic_core/
 Frameworks deliberately **not** adopted (but swappable in at a clean seam):
 LangGraph (durable state), Pydantic AI (typed-agent ergonomics), CrewAI, provider
 Agents SDKs. Protocols to know by name: **MCP** (agent↔tools), **A2A** (agent↔agent).
+
+## Develop this repo
+
+Only if you're working *on* the package itself (contributing), not just using it:
+
+```bash
+uv sync --extra dev      # dev + runtime deps into .venv
+uv run pytest -q         # fully offline, no API key needed
+```
 
 ## License
 
