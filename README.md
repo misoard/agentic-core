@@ -2,8 +2,7 @@
 
 A minimal, opinionated, **framework-agnostic** skeleton for production LLM / agent
 systems. A thin core *you own*, sitting on stable industry standards (Pydantic,
-LiteLLM, OpenTelemetry, tenacity). Not a LangChain competitor — a reference base
-small enough to hold in your head.
+LiteLLM, OpenTelemetry, tenacity).
 
 **The one idea everything hangs off:** *every model call flows through a single
 place* (the gateway). That one chokepoint is what lets reliability, latency, and
