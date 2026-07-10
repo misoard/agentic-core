@@ -1,0 +1,45 @@
+[project]
+name = "agentic-core"
+version = "0.1.0"
+description = "Project-agnostic agentic LLM core skeleton — one call path, typed contracts, narrow agents."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Mathieu Isoard", email = "isoard.mathieu@gmail.com" }]
+keywords = ["llm", "agents", "litellm", "pydantic", "gateway", "orchestration"]
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Typing :: Typed",
+    "Intended Audience :: Developers",
+]
+dependencies = [
+    "pydantic>=2.7",
+    "pydantic-settings>=2.2",
+    "litellm>=1.40",
+    "tenacity>=8.3",
+    "opentelemetry-api>=1.25",
+    "opentelemetry-sdk>=1.25",
+    "opentelemetry-exporter-otlp-proto-http>=1.25",
+    "logfire>=0.40",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "pytest-asyncio>=0.23",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agentic_core"]
+# Ship the PEP 561 marker so downstream mypy/IDEs pick up our type hints.
+artifacts = ["src/agentic_core/py.typed"]
+
+[tool.pytest.ini_options]
+# async-first: let pytest treat `async def test_*` as coroutines without per-test markers.
+asyncio_mode = "auto"
+testpaths = ["tests"]
+# The core suite is self-contained; only the package needs to be importable.
+pythonpath = ["src"]
