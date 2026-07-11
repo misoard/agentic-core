@@ -116,6 +116,25 @@ how_to_start/                    toy example (in the repo, NOT in the wheel):
   config.py · agents.py · prompts/ · workflow.py
 ```
 
+### Module guide — the one thing to know about each file
+
+| File | What it is / the one thing to know |
+|---|---|
+| `core/errors.py` | The failure taxonomy. **Transient → Router's job; malformed → gateway re-prompts; guard/permanent → fail-closed.** This classification *is* the reliability. |
+| `core/schemas.py` | The typed carriers crossing every layer: `Completion` (generic over its parsed type), `TokenUsage`, `ToolCall`. |
+| `core/config.py` | Models & secrets as data: `Settings`, `Deployment`, the registry, and `build_router_kwargs` (the one seam to the Router). Keys resolve by the `<provider>_api_key` convention. |
+| `core/gateway.py` | **The keystone.** Every call goes through `complete()`: output validation + re-prompt, cost/latency/token capture, terminal error classification. No transient-retry loop (that's the Router's). |
+| `core/observability.py` | One OTel span per call (latency, tokens, cost, model, errors). No-op until you `configure()` it — so tests stay offline. |
+| `agents/base.py` | The `Agent`: prompt template + typed input/output, run through the gateway. Stateless; the caller owns any `history`. |
+| `orchestration/runner.py` | Composition primitives over async steps: `run_sequential`, `run_concurrent`, `run_conditional`, and a small `State`. Agent-agnostic. |
+| `guardrails/io_guards.py` | Input/output safety: injection check, tool-arg validation, PII scan, policy. Heuristic first line, `GuardResult` you fail-closed on. |
+| `eval/harness.py` | The offline loop: dataset → run → score (deterministic + LLM-judge) → `compare` two runs for regressions. |
+| `testing.py` | Shipped test seam: `FakeRouter` + `make_response` to test agents/workflows without a provider. |
+
+**Deeper written notes:** [`orchestration_notes.pdf`](orchestration_notes.pdf) —
+the longer-form design notes behind this pipeline (not part of the package; repo
+reference only).
+
 Frameworks deliberately **not** adopted (but swappable in at a clean seam):
 LangGraph (durable state), Pydantic AI (typed-agent ergonomics), CrewAI, provider
 Agents SDKs. Protocols to know by name: **MCP** (agent↔tools), **A2A** (agent↔agent).
