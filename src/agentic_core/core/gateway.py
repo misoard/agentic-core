@@ -237,7 +237,8 @@ class Gateway:
 
     @staticmethod
     def _schema_instruction(response_model: type[BaseModel]) -> dict[str, Any]:
-        schema = json.dumps(response_model.model_json_schema())
+        #schema = json.dumps(response_model.model_json_schema())
+        schema = json.dumps(response_model.model_json_schema(), ensure_ascii=False)  # corrigé
         return {
             "role": "system",
             "content": (
